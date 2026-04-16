@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Shield, Zap, Eye, Heart } from 'lucide-react';
 import { Dragon, PlayerState, BattleLogEntry, Skill } from '../types/game';
-import { calculateDamage, calculateEnemyDamage } from '../lib/gameData';
+import { calculateDamage, calculateEnemyDamage, getPetById } from '../lib/gameData';
 
 interface Props {
   player: PlayerState;
@@ -204,13 +204,17 @@ function StatBar({ value, max, color, label }: { value: number; max: number; col
 }
 
 export default function BattleArena({ player: initialPlayer, dragon: initialDragon, onVictory, onDefeat }: Props) {
-  const effectiveAttack = initialPlayer.attack + (initialPlayer.buffs?.attack ?? 0);
-  const effectiveDefense = initialPlayer.defense + (initialPlayer.buffs?.defense ?? 0);
+  const activePet = getPetById(initialPlayer.activePetId ?? null);
+  const effectiveAttack = initialPlayer.attack + (initialPlayer.buffs?.attack ?? 0) + (activePet?.bonusAtk ?? 0);
+  const effectiveDefense = initialPlayer.defense + (initialPlayer.buffs?.defense ?? 0) + (activePet?.bonusDef ?? 0);
+  const effectiveMaxHp = initialPlayer.maxHp + (activePet?.bonusHp ?? 0);
 
   const [player, setPlayer] = useState<PlayerState>({
     ...initialPlayer,
     attack: effectiveAttack,
     defense: effectiveDefense,
+    maxHp: effectiveMaxHp,
+    hp: Math.min(initialPlayer.hp + (activePet?.bonusHp ?? 0), effectiveMaxHp),
   });
   const [dragon, setDragon] = useState<Dragon>({
     ...initialDragon,
@@ -232,6 +236,9 @@ export default function BattleArena({ player: initialPlayer, dragon: initialDrag
   }
   if (initialPlayer.hasPhoenixFeather) {
     initLog.push({ id: 4, message: 'Phoenix Feather ready! You will be revived if you fall.', type: 'heal' });
+  }
+  if (activePet) {
+    initLog.push({ id: 5, message: `${activePet.name} joins the battle! (+${activePet.bonusAtk} ATK, +${activePet.bonusDef} DEF, +${activePet.bonusHp} HP)`, type: 'heal' });
   }
   const [log, setLog] = useState<BattleLogEntry[]>(initLog);
   const [logId, setLogId] = useState(initLog.length);
@@ -317,8 +324,10 @@ export default function BattleArena({ player: initialPlayer, dragon: initialDrag
               skills: updatedSkills,
               exp: player.exp + dragon.rewardExp,
               gold: player.gold + dragon.rewardGold,
+              diamonds: player.diamonds + (dragon.rewardDiamonds ?? 0),
               attack: initialPlayer.attack,
               defense: initialPlayer.defense,
+              maxHp: initialPlayer.maxHp,
               buffs: { attack: 0, defense: 0, speed: 0 },
               hasPhoenixFeather: false,
               hasCooldownReset: false,
@@ -445,7 +454,7 @@ export default function BattleArena({ player: initialPlayer, dragon: initialDrag
                 <StatBar value={player.hp} max={player.maxHp} color="#22c55e" label="HP" />
                 <StatBar value={player.mp} max={player.maxMp} color="#3b82f6" label="MP" />
               </div>
-              {(initialPlayer.buffs?.attack > 0 || initialPlayer.buffs?.defense > 0 || hasFeather) && (
+              {(initialPlayer.buffs?.attack > 0 || initialPlayer.buffs?.defense > 0 || hasFeather || activePet) && (
                 <div className="mt-2 flex flex-wrap gap-1">
                   {initialPlayer.buffs?.attack > 0 && (
                     <span className="text-xs px-1.5 py-0.5 rounded text-green-300 font-bold"
@@ -463,6 +472,12 @@ export default function BattleArena({ player: initialPlayer, dragon: initialDrag
                     <span className="text-xs px-1.5 py-0.5 rounded text-orange-300 font-bold"
                       style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.3)' }}>
                       🪶 Feather
+                    </span>
+                  )}
+                  {activePet && (
+                    <span className="text-xs px-1.5 py-0.5 rounded font-bold cinzel"
+                      style={{ background: `${activePet.color}20`, border: `1px solid ${activePet.color}60`, color: activePet.accentColor }}>
+                      🐾 {activePet.name}
                     </span>
                   )}
                 </div>

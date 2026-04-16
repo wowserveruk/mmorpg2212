@@ -31,6 +31,39 @@ export interface PlayerBuffs {
   speed: number;
 }
 
+export interface Pet {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  element: 'fire' | 'ice' | 'storm' | 'shadow' | 'holy' | 'dragon';
+  rarity: 'rare' | 'epic' | 'legendary';
+  color: string;
+  accentColor: string;
+  bonusAtk: number;
+  bonusDef: number;
+  bonusHp: number;
+  bonusSpeed: number;
+  battleSkillName: string;
+  battleSkillDamage: number;
+  battleSkillDescription: string;
+  unlockCost: number;
+  unlockCostType: 'gold' | 'diamonds';
+}
+
+export interface VipTier {
+  level: number;
+  title: string;
+  diamondsRequired: number;
+  color: string;
+  benefits: string[];
+  bonusAtk: number;
+  bonusDef: number;
+  bonusHpPercent: number;
+  goldMultiplier: number;
+  expMultiplier: number;
+}
+
 export interface PlayerState {
   name: string;
   classId: string;
@@ -45,12 +78,17 @@ export interface PlayerState {
   level: number;
   exp: number;
   gold: number;
+  diamonds: number;
+  vipLevel: number;
+  vipExp: number;
   skills: Skill[];
   color: string;
   accentColor: string;
   buffs: PlayerBuffs;
   hasPhoenixFeather: boolean;
   hasCooldownReset: boolean;
+  ownedPetIds: string[];
+  activePetId: string | null;
 }
 
 export interface DragonAbility {
@@ -72,6 +110,7 @@ export interface Dragon {
   abilities: DragonAbility[];
   rewardExp: number;
   rewardGold: number;
+  rewardDiamonds: number;
   color: string;
   description: string;
 }
@@ -82,7 +121,7 @@ export interface BattleLogEntry {
   type: 'player' | 'enemy' | 'system' | 'heal' | 'critical';
 }
 
-export type GameScreen = 'landing' | 'charSelect' | 'worldMap' | 'shop' | 'battle' | 'victory' | 'defeat' | 'leaderboard';
+export type GameScreen = 'landing' | 'charSelect' | 'worldMap' | 'shop' | 'battle' | 'victory' | 'defeat' | 'leaderboard' | 'pets' | 'vip';
 
 export interface LeaderboardEntry {
   id: string;

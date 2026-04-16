@@ -1,4 +1,4 @@
-import { CharacterClass, Dragon, PlayerState, ShopItem } from '../types/game';
+import { CharacterClass, Dragon, Pet, PlayerState, ShopItem, VipTier } from '../types/game';
 
 export const CHARACTER_CLASSES: CharacterClass[] = [
   {
@@ -93,6 +93,7 @@ export const DRAGONS: Dragon[] = [
     description: 'A young but ferocious fire dragon that guards the Scorched Highlands.',
     rewardExp: 200,
     rewardGold: 150,
+    rewardDiamonds: 20,
     abilities: [
       { name: 'Claw Swipe', damage: 35, description: 'Rakes with razor-sharp claws.', type: 'physical' },
       { name: 'Flame Breath', damage: 55, description: 'Exhales a torrent of scorching flames.', type: 'fire' },
@@ -112,6 +113,7 @@ export const DRAGONS: Dragon[] = [
     description: 'An ancient serpent of ice that has slumbered beneath the Frozen Peaks for centuries.',
     rewardExp: 400,
     rewardGold: 300,
+    rewardDiamonds: 40,
     abilities: [
       { name: 'Ice Bite', damage: 50, description: 'Bites with fangs coated in frost.', type: 'ice' },
       { name: 'Blizzard Breath', damage: 70, description: 'Unleashes a devastating blizzard.', type: 'ice' },
@@ -131,6 +133,7 @@ export const DRAGONS: Dragon[] = [
     description: 'A colossal serpent wreathed in living lightning. Its scales crackle with centuries of stored storm energy.',
     rewardExp: 550,
     rewardGold: 420,
+    rewardDiamonds: 60,
     abilities: [
       { name: 'Thunder Fang', damage: 62, description: 'Bites with electrified fangs.', type: 'physical' },
       { name: 'Tempest Breath', damage: 82, description: 'Exhales a torrent of lightning and wind.', type: 'dark' },
@@ -150,6 +153,7 @@ export const DRAGONS: Dragon[] = [
     description: 'A mountain of living magma and obsidian scales. Every breath scorches the ground to glass.',
     rewardExp: 680,
     rewardGold: 540,
+    rewardDiamonds: 80,
     abilities: [
       { name: 'Magma Crush', damage: 68, description: 'Slams down a molten fist of rock.', type: 'fire' },
       { name: 'Volcanic Breath', damage: 92, description: 'Unleashes a river of superheated lava.', type: 'fire' },
@@ -169,6 +173,7 @@ export const DRAGONS: Dragon[] = [
     description: 'The oldest and most powerful dragon in existence. Its very breath corrupts reality.',
     rewardExp: 900,
     rewardGold: 700,
+    rewardDiamonds: 150,
     abilities: [
       { name: 'Void Claw', damage: 78, description: 'Strikes with claws that tear at existence.', type: 'dark' },
       { name: 'Shadow Breath', damage: 105, description: 'Breathes dark energy that devours light.', type: 'dark' },
@@ -333,6 +338,231 @@ export function calculateEnemyDamage(enemyAttack: number, abilityDamage: number,
   return Math.floor(reduced * variance);
 }
 
+export const PETS: Pet[] = [
+  {
+    id: 'ember-fox',
+    name: 'Ember Fox',
+    title: 'Spirit of the Flame',
+    description: 'A fiery fox spirit born from volcanic ash. Its tails radiate scorching heat.',
+    element: 'fire',
+    rarity: 'rare',
+    color: '#ef4444',
+    accentColor: '#fca5a5',
+    bonusAtk: 15,
+    bonusDef: 5,
+    bonusHp: 80,
+    bonusSpeed: 10,
+    battleSkillName: 'Inferno Tail',
+    battleSkillDamage: 45,
+    battleSkillDescription: 'Whips the enemy with a tail of pure fire.',
+    unlockCost: 300,
+    unlockCostType: 'gold',
+  },
+  {
+    id: 'frost-sprite',
+    name: 'Frost Sprite',
+    title: 'Child of the Frozen Peaks',
+    description: 'A crystalline spirit forged from glacier ice. It chills foes to the bone.',
+    element: 'ice',
+    rarity: 'rare',
+    color: '#38bdf8',
+    accentColor: '#bae6fd',
+    bonusAtk: 10,
+    bonusDef: 15,
+    bonusHp: 100,
+    bonusSpeed: 8,
+    battleSkillName: 'Glacial Shard',
+    battleSkillDamage: 40,
+    battleSkillDescription: 'Launches a razor-sharp shard of enchanted ice.',
+    unlockCost: 350,
+    unlockCostType: 'gold',
+  },
+  {
+    id: 'thunder-hawk',
+    name: 'Thunder Hawk',
+    title: 'Harbinger of Storms',
+    description: 'A majestic hawk whose feathers crackle with endless lightning. Fastest of all pets.',
+    element: 'storm',
+    rarity: 'epic',
+    color: '#facc15',
+    accentColor: '#fef08a',
+    bonusAtk: 20,
+    bonusDef: 8,
+    bonusHp: 120,
+    bonusSpeed: 25,
+    battleSkillName: 'Thunderstrike',
+    battleSkillDamage: 70,
+    battleSkillDescription: 'Dives at lightning speed, striking with electrified talons.',
+    unlockCost: 80,
+    unlockCostType: 'diamonds',
+  },
+  {
+    id: 'shadow-wolf',
+    name: 'Shadow Wolf',
+    title: 'Phantom of Darkness',
+    description: 'A spectral wolf that phases in and out of reality. Strikes from the void itself.',
+    element: 'shadow',
+    rarity: 'epic',
+    color: '#a78bfa',
+    accentColor: '#ddd6fe',
+    bonusAtk: 30,
+    bonusDef: 10,
+    bonusHp: 90,
+    bonusSpeed: 18,
+    battleSkillName: 'Void Fang',
+    battleSkillDamage: 85,
+    battleSkillDescription: 'Bites with fangs that tear through the fabric of existence.',
+    unlockCost: 120,
+    unlockCostType: 'diamonds',
+  },
+  {
+    id: 'sacred-unicorn',
+    name: 'Sacred Unicorn',
+    title: 'Divine Guardian',
+    description: 'A legendary unicorn blessed by the gods themselves. Its horn radiates holy power.',
+    element: 'holy',
+    rarity: 'legendary',
+    color: '#f0abfc',
+    accentColor: '#fae8ff',
+    bonusAtk: 25,
+    bonusDef: 25,
+    bonusHp: 200,
+    bonusSpeed: 15,
+    battleSkillName: 'Holy Lance',
+    battleSkillDamage: 100,
+    battleSkillDescription: 'Charges forward with a radiant horn imbued with divine wrath.',
+    unlockCost: 250,
+    unlockCostType: 'diamonds',
+  },
+  {
+    id: 'dragon-hatchling',
+    name: 'Dragon Hatchling',
+    title: 'Child of the Ancient',
+    description: 'A hatchling born from the egg of Malachar himself. Already radiates immense draconic power.',
+    element: 'dragon',
+    rarity: 'legendary',
+    color: '#7c3aed',
+    accentColor: '#c4b5fd',
+    bonusAtk: 45,
+    bonusDef: 20,
+    bonusHp: 250,
+    bonusSpeed: 20,
+    battleSkillName: 'Ancient Breath',
+    battleSkillDamage: 130,
+    battleSkillDescription: 'Breathes a torrent of ancient dragon fire that scorches reality.',
+    unlockCost: 400,
+    unlockCostType: 'diamonds',
+  },
+];
+
+export const VIP_TIERS: VipTier[] = [
+  {
+    level: 1,
+    title: 'Bronze Slayer',
+    diamondsRequired: 0,
+    color: '#cd7f32',
+    benefits: ['Access to VIP Shop', '+5% Gold Drops'],
+    bonusAtk: 5,
+    bonusDef: 3,
+    bonusHpPercent: 5,
+    goldMultiplier: 1.05,
+    expMultiplier: 1.0,
+  },
+  {
+    level: 2,
+    title: 'Silver Champion',
+    diamondsRequired: 200,
+    color: '#94a3b8',
+    benefits: ['+10% Gold Drops', '+5% EXP Gain', 'Silver aura'],
+    bonusAtk: 10,
+    bonusDef: 6,
+    bonusHpPercent: 8,
+    goldMultiplier: 1.1,
+    expMultiplier: 1.05,
+  },
+  {
+    level: 3,
+    title: 'Gold Dragonslayer',
+    diamondsRequired: 500,
+    color: '#f59e0b',
+    benefits: ['+20% Gold Drops', '+10% EXP Gain', 'Gold aura'],
+    bonusAtk: 18,
+    bonusDef: 10,
+    bonusHpPercent: 12,
+    goldMultiplier: 1.2,
+    expMultiplier: 1.1,
+  },
+  {
+    level: 4,
+    title: 'Platinum Warlord',
+    diamondsRequired: 1000,
+    color: '#e2e8f0',
+    benefits: ['+30% Gold Drops', '+20% EXP Gain', 'Platinum aura'],
+    bonusAtk: 28,
+    bonusDef: 16,
+    bonusHpPercent: 18,
+    goldMultiplier: 1.3,
+    expMultiplier: 1.2,
+  },
+  {
+    level: 5,
+    title: 'Diamond Sovereign',
+    diamondsRequired: 2000,
+    color: '#67e8f9',
+    benefits: ['+40% Gold Drops', '+30% EXP Gain', 'Diamond aura'],
+    bonusAtk: 40,
+    bonusDef: 22,
+    bonusHpPercent: 25,
+    goldMultiplier: 1.4,
+    expMultiplier: 1.3,
+  },
+  {
+    level: 6,
+    title: 'Dragon Lord',
+    diamondsRequired: 4000,
+    color: '#f97316',
+    benefits: ['+55% Gold Drops', '+45% EXP Gain', 'Blazing aura'],
+    bonusAtk: 55,
+    bonusDef: 30,
+    bonusHpPercent: 35,
+    goldMultiplier: 1.55,
+    expMultiplier: 1.45,
+  },
+  {
+    level: 7,
+    title: 'Mythic Conqueror',
+    diamondsRequired: 8000,
+    color: '#dc2626',
+    benefits: ['+70% Gold Drops', '+60% EXP Gain', 'Infernal aura'],
+    bonusAtk: 72,
+    bonusDef: 40,
+    bonusHpPercent: 50,
+    goldMultiplier: 1.7,
+    expMultiplier: 1.6,
+  },
+  {
+    level: 8,
+    title: 'Eternal Dragon Emperor',
+    diamondsRequired: 15000,
+    color: '#f59e0b',
+    benefits: ['+100% Gold Drops', '+100% EXP Gain', 'Legendary divine aura', 'Exclusive Emperor title'],
+    bonusAtk: 100,
+    bonusDef: 55,
+    bonusHpPercent: 70,
+    goldMultiplier: 2.0,
+    expMultiplier: 2.0,
+  },
+];
+
+export function getVipTier(vipLevel: number): VipTier {
+  return VIP_TIERS[Math.max(0, Math.min(vipLevel - 1, VIP_TIERS.length - 1))];
+}
+
+export function getPetById(id: string | null): Pet | null {
+  if (!id) return null;
+  return PETS.find(p => p.id === id) ?? null;
+}
+
 export function calculateBR(player: PlayerState): number {
   const hpScore = Math.floor(player.maxHp * 0.8);
   const atkScore = player.attack * 10;
@@ -344,7 +574,10 @@ export function calculateBR(player: PlayerState): number {
   const featherScore = player.hasPhoenixFeather ? 800 : 0;
   const resetScore = player.hasCooldownReset ? 600 : 0;
   const buffScore = (player.buffs?.attack ?? 0) * 15 + (player.buffs?.defense ?? 0) * 10 + (player.buffs?.speed ?? 0) * 8;
-  return hpScore + atkScore + defScore + spdScore + expScore + goldScore + levelScore + featherScore + resetScore + buffScore;
+  const vipScore = (player.vipLevel ?? 0) * 1200;
+  const activePet = getPetById(player.activePetId ?? null);
+  const petScore = activePet ? (activePet.bonusAtk * 12 + activePet.bonusDef * 8 + activePet.bonusHp * 0.6 + activePet.bonusSpeed * 6 + activePet.battleSkillDamage * 4) : 0;
+  return hpScore + atkScore + defScore + spdScore + expScore + goldScore + levelScore + featherScore + resetScore + buffScore + vipScore + petScore;
 }
 
 export function formatBR(br: number): string {

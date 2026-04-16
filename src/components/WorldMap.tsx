@@ -7,6 +7,8 @@ interface Props {
   defeatedDragons: string[];
   onFight: (dragon: Dragon) => void;
   onShop: () => void;
+  onPets: () => void;
+  onVip: () => void;
 }
 
 const DRAGON_POSITIONS = [
@@ -51,7 +53,7 @@ function DragonNodeSVG({ color }: { color: string }) {
   );
 }
 
-export default function WorldMap({ player, defeatedDragons, onFight, onShop }: Props) {
+export default function WorldMap({ player, defeatedDragons, onFight, onShop, onPets, onVip }: Props) {
   function getNodeState(dragon: Dragon, index: number): 'locked' | 'available' | 'defeated' {
     if (defeatedDragons.includes(dragon.id)) return 'defeated';
     if (index === 0) return 'available';
@@ -91,7 +93,19 @@ export default function WorldMap({ player, defeatedDragons, onFight, onShop }: P
               <div className="text-yellow-400 font-bold text-base" style={{ fontFamily: 'Cinzel, serif' }}>{player.gold}</div>
               <div className="text-amber-700/60 text-xs">Gold</div>
             </div>
-            <button onClick={onShop}
+            <button onClick={onPets}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer transition-all duration-150"
+              style={{
+                background: 'rgba(96,165,250,0.15)',
+                border: '1px solid rgba(96,165,250,0.4)',
+                color: '#93c5fd',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(96,165,250,0.8)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(96,165,250,0.4)')}>
+              <span className="text-sm">🐾</span>
+              <span className="cinzel font-bold text-xs tracking-wider hidden sm:inline">Pets</span>
+            </button>
+            <button onClick={onVip}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer pulse-gold-anim"
               style={{
                 background: 'linear-gradient(135deg, #78350f, #d97706)',
@@ -99,7 +113,19 @@ export default function WorldMap({ player, defeatedDragons, onFight, onShop }: P
                 color: '#1a0800',
               }}>
               <Crown size={13} />
-              <span className="cinzel font-bold text-xs tracking-wider">VIP Shop</span>
+              <span className="cinzel font-bold text-xs tracking-wider hidden sm:inline">VIP</span>
+            </button>
+            <button onClick={onShop}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer transition-all duration-150"
+              style={{
+                background: 'rgba(217,119,6,0.2)',
+                border: '1px solid rgba(217,119,6,0.5)',
+                color: '#fbbf24',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(217,119,6,0.9)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(217,119,6,0.5)')}>
+              <span className="text-sm">🛒</span>
+              <span className="cinzel font-bold text-xs tracking-wider hidden sm:inline">Shop</span>
             </button>
           </div>
         </div>

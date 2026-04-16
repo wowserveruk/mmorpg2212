@@ -9,6 +9,8 @@ import VictoryScreen from './components/VictoryScreen';
 import DefeatScreen from './components/DefeatScreen';
 import Leaderboard from './components/Leaderboard';
 import ShopScreen from './components/ShopScreen';
+import PetScreen from './components/PetScreen';
+import VipScreen from './components/VipScreen';
 
 function createPlayer(cls: CharacterClass, name: string): PlayerState {
   return {
@@ -24,13 +26,18 @@ function createPlayer(cls: CharacterClass, name: string): PlayerState {
     speed: cls.speed,
     level: 1,
     exp: 0,
-    gold: 0,
+    gold: 200,
+    diamonds: 0,
+    vipLevel: 1,
+    vipExp: 0,
     skills: cls.skills.map(s => ({ ...s })),
     color: cls.color,
     accentColor: cls.accentColor,
     buffs: { attack: 0, defense: 0, speed: 0 },
     hasPhoenixFeather: false,
     hasCooldownReset: false,
+    ownedPetIds: [],
+    activePetId: null,
   };
 }
 
@@ -138,6 +145,8 @@ export default function App() {
           defeatedDragons={defeatedDragons}
           onFight={handleFightDragon}
           onShop={() => setScreen('shop')}
+          onPets={() => setScreen('pets')}
+          onVip={() => setScreen('vip')}
         />
       )}
 
@@ -146,6 +155,22 @@ export default function App() {
           player={player}
           purchaseCounts={purchaseCounts}
           onPurchase={handleShopPurchase}
+          onBack={() => setScreen('worldMap')}
+        />
+      )}
+
+      {screen === 'pets' && player && (
+        <PetScreen
+          player={player}
+          onUpdate={setPlayer}
+          onBack={() => setScreen('worldMap')}
+        />
+      )}
+
+      {screen === 'vip' && player && (
+        <VipScreen
+          player={player}
+          onUpdate={setPlayer}
           onBack={() => setScreen('worldMap')}
         />
       )}

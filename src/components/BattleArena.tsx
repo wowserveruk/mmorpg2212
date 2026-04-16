@@ -29,46 +29,100 @@ function DragonSprite({ dragon, isAttacking, isTakingHit }: {
   isTakingHit: boolean;
 }) {
   const c = dragon.color;
+  const darkC = '#0d0404';
+  const midC = '#1a0808';
+
+  const attackEmoji =
+    dragon.id === 'frost-wyrm' ? '❄️' :
+    dragon.id === 'storm-serpent' ? '⚡' :
+    dragon.id === 'molten-colossus' ? '🌋' :
+    dragon.id === 'ancient-dragon' ? '💀' : '🔥';
 
   return (
-    <div className={`relative w-48 h-48 mx-auto ${isAttacking ? 'dragon-attack-anim' : ''} ${isTakingHit ? 'shake-anim' : ''}`}>
-      <svg viewBox="0 0 200 200" className="w-full h-full">
+    <div className={`relative mx-auto float-slow-anim ${isAttacking ? 'dragon-attack-anim' : ''} ${isTakingHit ? 'shake-anim' : ''}`}
+      style={{ width: 260, height: 220 }}>
+      <svg viewBox="0 0 260 220" className="w-full h-full">
         <defs>
           <radialGradient id={`bg-${dragon.id}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={c} stopOpacity="0.3" />
+            <stop offset="0%" stopColor={c} stopOpacity="0.35" />
+            <stop offset="60%" stopColor={c} stopOpacity="0.12" />
             <stop offset="100%" stopColor={c} stopOpacity="0" />
           </radialGradient>
+          <radialGradient id={`wingL-${dragon.id}`} cx="80%" cy="30%" r="70%">
+            <stop offset="0%" stopColor={c} stopOpacity="0.55" />
+            <stop offset="100%" stopColor={c} stopOpacity="0.15" />
+          </radialGradient>
+          <radialGradient id={`wingR-${dragon.id}`} cx="20%" cy="30%" r="70%">
+            <stop offset="0%" stopColor={c} stopOpacity="0.55" />
+            <stop offset="100%" stopColor={c} stopOpacity="0.15" />
+          </radialGradient>
           <filter id={`dragonGlowBattle-${dragon.id}`}>
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id={`eyeGlow-${dragon.id}`}>
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         </defs>
-        <ellipse cx="100" cy="100" rx="90" ry="85" fill={`url(#bg-${dragon.id})`} />
-        <g filter={`url(#dragonGlowBattle-${dragon.id})`} stroke={c} strokeWidth="2" fill="#0d0505">
-          <path d="M100 155 Q80 138 65 112 Q52 89 60 68 Q68 50 90 45 Q100 42 112 48 Q128 43 136 60 Q148 80 138 105 Q125 135 100 155Z" fill="#1a0808" />
-          <path d="M90 45 Q72 22 56 14 Q44 20 50 38 Q55 52 68 56Z" fill="#100505" stroke={c} />
-          <path d="M112 48 Q130 26 146 20 Q158 26 153 44 Q148 58 134 59Z" fill="#100505" stroke={c} />
-          <path d="M60 68 Q32 58 18 68 Q10 82 24 90 Q40 96 57 88 Q63 80 62 72Z" fill="#100505" />
-          <path d="M65 112 Q38 124 25 146 Q18 165 34 170 Q50 174 65 160 Q76 145 72 128Z" fill="#100505" />
-          <path d="M138 105 Q165 102 178 116 Q185 130 174 137 Q160 142 146 133 Q138 122 140 111Z" fill="#100505" />
-          <path d="M100 155 Q90 172 85 188 Q80 198 92 200 Q105 202 108 186 Q112 172 108 158Z" fill="#100505" />
-          <circle cx="83" cy="72" r="6" fill="#ff2200" />
-          <circle cx="117" cy="72" r="6" fill="#ff2200" />
-          <circle cx="83" cy="72" r="3" fill="#ffaa00" />
-          <circle cx="117" cy="72" r="3" fill="#ffaa00" />
-          <path d="M88 96 Q98 103 100 100 Q102 103 112 96" stroke={c} strokeWidth="1.5" fill="none" />
-          <line x1="90" y1="108" x2="82" y2="116" stroke={c} strokeWidth="1" />
-          <line x1="98" y1="110" x2="94" y2="120" stroke={c} strokeWidth="1" />
-          <line x1="104" y1="110" x2="108" y2="120" stroke={c} strokeWidth="1" />
-          <line x1="112" y1="108" x2="120" y2="116" stroke={c} strokeWidth="1" />
-          <path d="M28 72 Q14 58 8 44 Q16 42 26 54 Q22 44 30 34 Q38 38 36 52 Q46 46 42 34 Q52 40 48 56 Q56 62 56 72Z" fill="#100505" stroke={c} strokeWidth="1.5" />
-          <path d="M170 120 Q186 108 196 96 Q188 94 178 106 Q174 96 182 84 Q172 88 168 102 Q160 98 164 86 Q154 92 158 108 Q150 116 152 126Z" fill="#100505" stroke={c} strokeWidth="1.5" />
+
+        <ellipse cx="130" cy="115" rx="118" ry="100" fill={`url(#bg-${dragon.id})`} />
+
+        <g filter={`url(#dragonGlowBattle-${dragon.id})`}>
+          <path d="M88 90 C65 68, 28 45, 5 22 C2 45, 8 72, 22 96 C36 118, 58 128, 82 125 Z"
+            fill={`url(#wingL-${dragon.id})`} stroke={c} strokeWidth="1.5" opacity="0.92" />
+          <line x1="88" y1="90" x2="5" y2="22" stroke={c} strokeWidth="1.2" opacity="0.7" />
+          <line x1="88" y1="90" x2="14" y2="62" stroke={c} strokeWidth="1" opacity="0.5" />
+          <line x1="88" y1="90" x2="28" y2="100" stroke={c} strokeWidth="0.8" opacity="0.4" />
+          <circle cx="5" cy="22" r="2.5" fill={c} opacity="0.8" />
+          <circle cx="14" cy="62" r="1.8" fill={c} opacity="0.6" />
+          <circle cx="28" cy="100" r="1.5" fill={c} opacity="0.5" />
+
+          <path d="M172 90 C195 68, 232 45, 255 22 C258 45, 252 72, 238 96 C224 118, 202 128, 178 125 Z"
+            fill={`url(#wingR-${dragon.id})`} stroke={c} strokeWidth="1.5" opacity="0.92" />
+          <line x1="172" y1="90" x2="255" y2="22" stroke={c} strokeWidth="1.2" opacity="0.7" />
+          <line x1="172" y1="90" x2="246" y2="62" stroke={c} strokeWidth="1" opacity="0.5" />
+          <line x1="172" y1="90" x2="232" y2="100" stroke={c} strokeWidth="0.8" opacity="0.4" />
+          <circle cx="255" cy="22" r="2.5" fill={c} opacity="0.8" />
+          <circle cx="246" cy="62" r="1.8" fill={c} opacity="0.6" />
+          <circle cx="232" cy="100" r="1.5" fill={c} opacity="0.5" />
         </g>
+
+        <g filter={`url(#dragonGlowBattle-${dragon.id})`} stroke={c} strokeWidth="2">
+          <path d="M130 175 Q108 155 90 126 Q74 100 82 76 Q90 56 112 50 Q130 46 148 52 Q168 47 176 68 Q188 88 176 118 Q162 150 130 175Z"
+            fill={midC} />
+          <path d="M112 50 Q92 24 72 14 Q58 20 65 42 Q70 58 86 62Z" fill={darkC} stroke={c} />
+          <path d="M148 52 Q168 28 186 18 Q200 24 195 46 Q190 62 172 62Z" fill={darkC} stroke={c} />
+          <path d="M82 76 Q52 64 36 76 Q26 92 42 102 Q60 108 80 100 Q88 90 85 80Z" fill={darkC} />
+          <path d="M90 126 Q60 140 46 164 Q38 185 56 190 Q75 194 90 178 Q102 162 96 144Z" fill={darkC} />
+          <path d="M176 118 Q208 114 222 130 Q230 146 218 154 Q202 160 186 150 Q176 138 178 126Z" fill={darkC} />
+          <path d="M130 175 Q118 196 112 212 Q106 222 120 224 Q135 226 138 210 Q142 194 138 178Z" fill={darkC} />
+          <path d="M95 80 Q104 70 110 74 Q116 70 125 80" stroke={c} strokeWidth="1.5" fill="none" opacity="0.6" />
+          <path d="M135 80 Q144 70 150 74 Q156 70 165 80" stroke={c} strokeWidth="1.5" fill="none" opacity="0.6" />
+        </g>
+
+        <g filter={`url(#eyeGlow-${dragon.id})`}>
+          <circle cx="108" cy="84" r="8" fill="#ff2200" />
+          <circle cx="152" cy="84" r="8" fill="#ff2200" />
+          <circle cx="108" cy="84" r="5" fill="#ff8800" />
+          <circle cx="152" cy="84" r="5" fill="#ff8800" />
+          <circle cx="108" cy="84" r="2.5" fill="#ffffff" />
+          <circle cx="152" cy="84" r="2.5" fill="#ffffff" />
+        </g>
+
+        <g stroke={c} strokeWidth="1" fill="none" opacity="0.5">
+          <line x1="116" y1="120" x2="106" y2="130" />
+          <line x1="126" y1="122" x2="120" y2="134" />
+          <line x1="136" y1="122" x2="140" y2="134" />
+          <line x1="146" y1="120" x2="154" y2="130" />
+        </g>
+
+        <path d="M116 108 Q128 116 130 112 Q132 116 144 108" stroke={c} strokeWidth="2" fill="none" />
       </svg>
 
       {isAttacking && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-4xl" style={{ animation: 'scale-in 0.3s ease-out' }}>🔥</div>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-5xl scale-in-anim">{attackEmoji}</div>
         </div>
       )}
     </div>

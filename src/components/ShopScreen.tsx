@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { ChevronLeft, ShoppingBag, Crown } from 'lucide-react';
+import { ChevronLeft, ShoppingBag, Crown, Zap } from 'lucide-react';
 import { PlayerState, ShopItem, ShopItemRarity } from '../types/game';
-import { SHOP_ITEMS } from '../lib/gameData';
+import { SHOP_ITEMS, calculateBR, formatBR } from '../lib/gameData';
 
 interface Props {
   player: PlayerState;
@@ -269,6 +269,12 @@ export default function ShopScreen({ player, purchaseCounts, onPurchase, onBack 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="glass-panel rounded-xl p-4">
             <p className="cinzel text-amber-700/60 text-xs tracking-widest mb-2">HERO STATUS</p>
+            <div className="flex items-center gap-2 mb-3 p-2 rounded-lg"
+              style={{ background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)' }}>
+              <Zap size={14} className="text-yellow-400" />
+              <span className="cinzel font-black text-yellow-300 text-lg">{formatBR(calculateBR(player))}</span>
+              <span className="text-yellow-600/60 text-xs">Battle Rating</span>
+            </div>
             <div className="space-y-1.5">
               <div className="flex justify-between text-sm">
                 <span className="text-amber-600/70">HP</span>

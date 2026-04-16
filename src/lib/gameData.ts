@@ -1,4 +1,4 @@
-import { CharacterClass, Dragon, ShopItem } from '../types/game';
+import { CharacterClass, Dragon, PlayerState, ShopItem } from '../types/game';
 
 export const CHARACTER_CLASSES: CharacterClass[] = [
   {
@@ -119,22 +119,60 @@ export const DRAGONS: Dragon[] = [
     ],
   },
   {
+    id: 'storm-serpent',
+    name: 'Drakonor',
+    title: 'The Storm Serpent',
+    hp: 620,
+    maxHp: 620,
+    attack: 62,
+    defense: 30,
+    level: 18,
+    color: '#16a34a',
+    description: 'A colossal serpent wreathed in living lightning. Its scales crackle with centuries of stored storm energy.',
+    rewardExp: 550,
+    rewardGold: 420,
+    abilities: [
+      { name: 'Thunder Fang', damage: 62, description: 'Bites with electrified fangs.', type: 'physical' },
+      { name: 'Tempest Breath', damage: 82, description: 'Exhales a torrent of lightning and wind.', type: 'dark' },
+      { name: 'Lightning Coil', damage: 72, description: 'Wraps the enemy in crackling lightning coils.', type: 'dark' },
+    ],
+  },
+  {
+    id: 'molten-colossus',
+    name: 'Infernus',
+    title: 'The Molten Colossus',
+    hp: 720,
+    maxHp: 720,
+    attack: 70,
+    defense: 36,
+    level: 22,
+    color: '#ea580c',
+    description: 'A mountain of living magma and obsidian scales. Every breath scorches the ground to glass.',
+    rewardExp: 680,
+    rewardGold: 540,
+    abilities: [
+      { name: 'Magma Crush', damage: 68, description: 'Slams down a molten fist of rock.', type: 'fire' },
+      { name: 'Volcanic Breath', damage: 92, description: 'Unleashes a river of superheated lava.', type: 'fire' },
+      { name: 'Pyroclast', damage: 80, description: 'Launches a barrage of explosive magma balls.', type: 'fire' },
+    ],
+  },
+  {
     id: 'ancient-dragon',
     name: 'Malachar',
     title: 'The Ancient One',
-    hp: 800,
-    maxHp: 800,
-    attack: 75,
-    defense: 40,
-    level: 25,
+    hp: 900,
+    maxHp: 900,
+    attack: 82,
+    defense: 45,
+    level: 30,
     color: '#7c3aed',
     description: 'The oldest and most powerful dragon in existence. Its very breath corrupts reality.',
-    rewardExp: 800,
-    rewardGold: 600,
+    rewardExp: 900,
+    rewardGold: 700,
     abilities: [
-      { name: 'Void Claw', damage: 70, description: 'Strikes with claws that tear at existence.', type: 'dark' },
-      { name: 'Shadow Breath', damage: 95, description: 'Breathes dark energy that devours light.', type: 'dark' },
-      { name: 'Ancient Wrath', damage: 120, description: 'Channels eons of rage into a single cataclysmic blow.', type: 'dark' },
+      { name: 'Void Claw', damage: 78, description: 'Strikes with claws that tear at existence.', type: 'dark' },
+      { name: 'Shadow Breath', damage: 105, description: 'Breathes dark energy that devours light.', type: 'dark' },
+      { name: 'Ancient Wrath', damage: 130, description: 'Channels eons of rage into a single cataclysmic blow.', type: 'dark' },
     ],
   },
 ];
@@ -293,4 +331,23 @@ export function calculateEnemyDamage(enemyAttack: number, abilityDamage: number,
   const reduced = Math.max(3, base - playerDefense * 0.35);
   const variance = 0.85 + Math.random() * 0.3;
   return Math.floor(reduced * variance);
+}
+
+export function calculateBR(player: PlayerState): number {
+  const hpScore = Math.floor(player.maxHp * 0.8);
+  const atkScore = player.attack * 10;
+  const defScore = player.defense * 6;
+  const spdScore = Math.floor(player.speed * 4);
+  const expScore = Math.floor((player.exp ?? 0) * 0.5);
+  const goldScore = Math.floor((player.gold ?? 0) * 0.3);
+  const levelScore = player.level * 500;
+  const featherScore = player.hasPhoenixFeather ? 800 : 0;
+  const resetScore = player.hasCooldownReset ? 600 : 0;
+  const buffScore = (player.buffs?.attack ?? 0) * 15 + (player.buffs?.defense ?? 0) * 10 + (player.buffs?.speed ?? 0) * 8;
+  return hpScore + atkScore + defScore + spdScore + expScore + goldScore + levelScore + featherScore + resetScore + buffScore;
+}
+
+export function formatBR(br: number): string {
+  if (br >= 10000) return `${(br / 1000).toFixed(1)}k`;
+  return br.toLocaleString();
 }

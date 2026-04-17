@@ -156,6 +156,10 @@ export default function CharacterSelect({ onSelect, onBack }: Props) {
                 {selectedClass.id === 'fire-mage' && '🔥'}
                 {selectedClass.id === 'shadow-archer' && '🏹'}
                 {selectedClass.id === 'holy-paladin' && '✦'}
+                {selectedClass.id === 'frost-sorcerer' && '❄'}
+                {selectedClass.id === 'demon-slayer' && '⚫'}
+                {selectedClass.id === 'nature-druid' && '🌿'}
+                {selectedClass.id === 'legendary-warrior' && '👑'}
               </div>
               <div>
                 <h3 className="cinzel font-bold text-2xl" style={{ color: selectedClass.accentColor }}>

@@ -83,6 +83,43 @@ function applyItemEffect(item: ShopItem, player: PlayerState): PlayerState {
       p.maxHp += 200;
       p.hp = Math.min(p.maxHp, p.hp + 200);
       break;
+    case 'iron-sword':
+      p.attack += 8;
+      break;
+    case 'steel-mace':
+      p.attack += 12;
+      break;
+    case 'crystal-bow':
+      p.attack += 10;
+      p.speed += 5;
+      break;
+    case 'enchanted-staff':
+      p.attack += 15;
+      break;
+    case 'obsidian-blade':
+      p.attack += 20;
+      break;
+    case 'ancient-halberd':
+      p.attack += 28;
+      break;
+    case 'excalibur-replica':
+      p.attack += 35;
+      p.defense += 10;
+      break;
+    case 'inferno-wand':
+      p.attack += 25;
+      break;
+    case 'dragonslay-sword':
+      p.attack += 42;
+      break;
+    case 'ethereal-bow':
+      p.attack += 40;
+      p.speed += 15;
+      break;
+    case 'divine-glaive':
+      p.attack += 50;
+      p.defense += 20;
+      break;
   }
 
   return p;
